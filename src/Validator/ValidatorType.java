@@ -1,0 +1,18 @@
+package Validator;
+
+/**
+ * Created by QUOCVIET on 12/23/2020.
+ */
+public enum ValidatorType {
+    STRING_VALIDATOR,
+    BOOLEAN_VALIDATOR,
+    BYTE_VALIDATOR,
+    SHORT_VALIDATOR,
+    INTEGER_VALIDATOR,
+    LONG_VALIDATOR,
+    FLOAT_VALIDATOR,
+    DOUBLE_VALIDATOR,
+    DATE_VALIDATOR,
+    EMAIL_VALIDATOR,
+    REGEX_VALIDATOR;
+}
