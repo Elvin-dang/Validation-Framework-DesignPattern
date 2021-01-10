@@ -15,5 +15,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface Max {
     String message() default "{Sẽ thêm sau}";
-    double value() default Integer.MAX_VALUE;
+    double value() default Double.MAX_VALUE;
 }

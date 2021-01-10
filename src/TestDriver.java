@@ -1,10 +1,12 @@
 import Message.ConsoleMessage;
-import Message.IMessage;
-import Message.WindowMessage;
 import Rule.Rule;
 import Rule.RulesManager;
+import TestClass.Student;
+import TestClass.Teacher;
+import Utils.AnnotationReader;
 
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by QUOCVIET on 12/23/2020.
@@ -12,23 +14,37 @@ import java.util.Calendar;
 public class TestDriver {
     public static void main(String[] args)
     {
-        IMessage a= new WindowMessage();
-        a.notify("FullName","ĐỘ DÀI TỐI ĐA 32 KÍ TỰ");
-        // --------------
-        a= new ConsoleMessage();
-        a.notify("FullName", "ĐỘ DÀI TỐI ĐA 32 KÍ TỰ");
+        Student student = new Student();
+        student.setID(500);
+        student.setFullName("");
+        student.setAddress(new ArrayList<>());
+        student.getAddress().add("1");
+        student.getAddress().add("1");
+        student.setEmail("abc@a.c");
+        Teacher teacher = new Teacher();
+        Object[] objs = new Object[10];
+        objs[0] = student;
+        objs[1] = teacher;
+
+        try {
+            AnnotationReader.setLocale(new Locale("vi"));
+            AnnotationReader.check(objs, new ConsoleMessage());
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         RulesManager manager = new RulesManager();
-        String ruleId = manager.addRule("PositiveNumber", new Rule<Integer>() {
+        String ruleId = manager.addRule("Max18", new Rule<Integer>() {
             @Override
             public boolean checkRule(Integer value) {
-                return value > 0;
+                return value <= 18 && value >= 0;
             }
         });
 
-        System.out.println(manager.getRuleID("PositiveNumber"));
-        System.out.println(manager.getRuleName(manager.getRuleID("PositiveNumber")));
-        System.out.println(manager.checkRule(manager.getRuleID("PositiveNumber"), -2));
-        System.out.println(manager.checkRule(manager.getRuleID("PositiveNumber"), 10));
+        System.out.println("\n----");
+        System.out.println(manager.getRuleID("Max18"));
+        System.out.println(manager.getRuleName(manager.getRuleID("Max18")));
+        System.out.println(manager.checkRule(ruleId, -2));
+        System.out.println(manager.checkRule(ruleId, 19));
     }
 }

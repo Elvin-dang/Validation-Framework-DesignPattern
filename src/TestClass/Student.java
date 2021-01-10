@@ -1,25 +1,35 @@
 package TestClass;
 
-import AnnotationCustom.Max;
-import AnnotationCustom.Min;
+import AnnotationCustom.*;
 
-/**
- * Created by QUOCVIET on 12/24/2020.
- */
+import java.util.ArrayList;
 
 public class Student {
-    private String fullname=null;
-
+    @NotNull
     @Max(value = 123)
     @Min(value = -100)
-    private int ID=0;
+    private int ID = 0;
 
-    public String getFullname() {
-        return fullname;
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    @Length(min = 10, max = 30)
+    private String fullName;
+
+    @NotNull
+    @Length(min = 2, max = 5)
+    private ArrayList<String> address;
+
+    @NotNull
+    @Email
+    private String email;
+
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public int getID() {
@@ -28,5 +38,21 @@ public class Student {
 
     public void setID(int ID) {
         this.ID = ID;
+    }
+
+    public ArrayList<String> getAddress() {
+        return address;
+    }
+
+    public void setAddress(ArrayList<String> address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
