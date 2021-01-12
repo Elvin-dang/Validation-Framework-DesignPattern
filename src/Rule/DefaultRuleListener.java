@@ -9,6 +9,10 @@ public class DefaultRuleListener implements RuleListener{
         this.manager = manager;
     }
 
+    public String getRuleName(Validator<?> validator) {
+        return manager.getRuleName(validator.getRuleID());
+    }
+
     @Override
     public boolean checkRule(Validator<?> validator) {
         return manager.checkRule(validator.getRuleID(), validator.getValue());
