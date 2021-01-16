@@ -5,6 +5,7 @@ import Rule.DefaultRuleListener;
 import Rule.RuleListener;
 
 import javax.swing.*;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
@@ -58,7 +59,7 @@ public abstract class Validator<T> {
 //    }
 
     // Set up rule
-    public void setBusinessRuleListener(RuleListener ruleListener) {
+    public void setRuleListener(RuleListener ruleListener) {
         this.ruleListener = ruleListener;
     }
 
@@ -94,6 +95,10 @@ public abstract class Validator<T> {
     // Set up Validation Message
     public String getViolationMessage() {
         return violationMessage;
+    }
+
+    public static void setViolationMessageLanguage(Locale locale) {
+        violationMessageResource = ResourceBundle.getBundle("resources.ValidationFramework/ValidationMessages", locale);
     }
 
     // Set up Validation Constaint
