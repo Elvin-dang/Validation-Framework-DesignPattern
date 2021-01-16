@@ -1,4 +1,5 @@
 import Message.ConsoleMessage;
+import Message.WindowMessage;
 import Rule.Rule;
 import Rule.RulesManager;
 import TestClass.Student;
@@ -28,7 +29,7 @@ public class TestDriver {
 
         try {
             AnnotationReader.setLocale(new Locale("vi"));
-            AnnotationReader.check(objs, new ConsoleMessage());
+            AnnotationReader.check(objs, new WindowMessage());
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }

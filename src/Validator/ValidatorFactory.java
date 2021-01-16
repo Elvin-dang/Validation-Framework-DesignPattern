@@ -3,7 +3,12 @@ package Validator;
 /**
  * Created by QUOCVIET on 12/23/2020.
  */
-public class ValidatorFactory {
+public final class ValidatorFactory {
+    private static final ValidatorFactory ValidatorFactoryObject = new ValidatorFactory();
+    private ValidatorFactory() {}
+    public static ValidatorFactory getInstance() {
+        return ValidatorFactoryObject;
+    }
     public static Validator<?> createValidator(ValidatorType validatorType) {
         Validator<?> validator = null;
         switch (validatorType) {
