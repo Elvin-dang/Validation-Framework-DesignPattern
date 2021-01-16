@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
  * Created by QUOCVIET on 12/23/2020.
  */
 public abstract class Validator<T> {
-    protected static ResourceBundle violationMessageResource = ResourceBundle.getBundle("tools4j.resources/Validator");
+    protected static ResourceBundle violationMessageResource = ResourceBundle.getBundle("resources.ValidationFramework/ValidationMessages");
 
     protected static final String[] OPENED  = {"(", "["};
     protected static final String[] CLOSED  = {")", "]"};
@@ -216,11 +216,6 @@ public abstract class Validator<T> {
 
     protected void showViolationDialog(IMessage iMessage) {
         iMessage.notify();
-//        if (iMessage!=null)
-//            JOptionPane.showMessageDialog(iMessage,
-//                    violationMessage,
-//                    violationMessageResource.getString("STR_TITLE"),
-//                    JOptionPane.ERROR_MESSAGE);
     }
 
 }
