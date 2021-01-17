@@ -17,7 +17,7 @@ public class LongValidator extends NumberValidator<Long> {
         }
         catch (NumberFormatException e) {
             violationConstraint = "Transform";
-            violationMessage = String.format(violationMessageResource.getString("STR_TRANSFORM"), value, "Long");
+            violationMessage = String.format(violationMessageResource.getString("constraints.Transform.message"), value, "Long");
 
             showViolationDialog(iMessage);
 

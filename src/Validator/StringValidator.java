@@ -86,7 +86,7 @@ public class StringValidator extends Validator<String> {
 
             if (!result) {
                 violationConstraint = "Pattern";
-                violationMessage = String.format(violationMessageResource.getString("STR_PATTERN"), value, pattern);
+                violationMessage = String.format(violationMessageResource.getString("constraints.Pattern.message"), value, pattern);
                 showViolationDialog(iMessage);
 
                 result = false;
@@ -96,14 +96,14 @@ public class StringValidator extends Validator<String> {
         if (result) {
             if (notEmpty && value.length()==0) {
                 violationConstraint = "NotEmpty";
-                violationMessage = String.format(violationMessageResource.getString("STR_NOTEMPTY"));
+                violationMessage = String.format(violationMessageResource.getString("constraints.NotEmpty.message"));
                 showViolationDialog(iMessage);
 
                 result = false;
 
             } else if (empty && value.length()!=0) {
                 violationConstraint = "Empty";
-                violationMessage = String.format(violationMessageResource.getString("STR_EMPTY"), value);
+                violationMessage = String.format(violationMessageResource.getString("constraints.Empty.message"), value);
                 showViolationDialog(iMessage);
 
                 result = false;

@@ -74,7 +74,7 @@ public class DateValidator extends Validator<Calendar> {
                 violationConstraint = "Pattern|Valid";
             else
                 violationConstraint = "Pattern";
-            violationMessage = String.format(violationMessageResource.getString("STR_DATE"), value, pattern);
+            violationMessage = String.format(violationMessageResource.getString("constraints.Date.message"), value, pattern);
 
             showViolationDialog(iMessage);
 
@@ -95,7 +95,7 @@ public class DateValidator extends Validator<Calendar> {
             }
             catch(IllegalArgumentException e) {
                 violationConstraint = "Valid";
-                violationMessage = String.format(violationMessageResource.getString("STR_VALID"), e.getMessage());
+                violationMessage = String.format(violationMessageResource.getString("constraints.Valid.message"), e.getMessage());
 
                 showViolationDialog(iMessage);
 
@@ -107,14 +107,14 @@ public class DateValidator extends Validator<Calendar> {
             int c = value.compareTo(Calendar.getInstance());
             if (past && c>0) {
                 violationConstraint = "Past";
-                violationMessage = String.format(violationMessageResource.getString("STR_PAST"), new SimpleDateFormat(pattern).format(value.getTime()));
+                violationMessage = String.format(violationMessageResource.getString("constraints.Past.message"), new SimpleDateFormat(pattern).format(value.getTime()));
 
                 showViolationDialog(iMessage);
 
                 result = false;
             } else if (future && c<0) {
                 violationConstraint = "Future";
-                violationMessage = String.format(violationMessageResource.getString("STR_FUTURE"), new SimpleDateFormat(pattern).format(value.getTime()));
+                violationMessage = String.format(violationMessageResource.getString("constraints.Future.message"), new SimpleDateFormat(pattern).format(value.getTime()));
 
                 showViolationDialog(iMessage);
 

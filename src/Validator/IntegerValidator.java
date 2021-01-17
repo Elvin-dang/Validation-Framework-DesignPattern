@@ -17,7 +17,7 @@ public class IntegerValidator extends NumberValidator<Integer>{
         }
         catch (NumberFormatException e) {
             violationConstraint = "Transform";
-            violationMessage = String.format(violationMessageResource.getString("STR_TRANSFORM"), value, "Integer");
+            violationMessage = String.format(violationMessageResource.getString("constraints.Transform.message"), value, "Integer");
 
             showViolationDialog(iMessage);
 

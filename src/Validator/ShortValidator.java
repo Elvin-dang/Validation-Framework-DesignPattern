@@ -17,7 +17,7 @@ public class ShortValidator extends NumberValidator<Short> {
         }
         catch (NumberFormatException e) {
             violationConstraint = "Transform";
-            violationMessage = String.format(violationMessageResource.getString("STR_TRANSFORM"), value, "Short");
+            violationMessage = String.format(violationMessageResource.getString("constraints.Transform.message"), value, "Short");
 
             showViolationDialog(iMessage);
 

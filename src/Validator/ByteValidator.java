@@ -17,7 +17,7 @@ public class ByteValidator extends NumberValidator<Byte> {
         }
         catch (NumberFormatException e) {
             violationConstraint = "Transform";
-            violationMessage = String.format(violationMessageResource.getString("STR_TRANSFORM"), value, "Byte");
+            violationMessage = String.format(violationMessageResource.getString("constraints.Transform.message"), value, "Byte");
 
             showViolationDialog(iMessage);
 

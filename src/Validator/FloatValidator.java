@@ -17,7 +17,7 @@ public class FloatValidator extends NumberValidator<Float> {
         }
         catch (NumberFormatException e) {
             violationConstraint = "Transform";
-            violationMessage = String.format(violationMessageResource.getString("STR_TRANSFORM"), value, "Float");
+            violationMessage = String.format(violationMessageResource.getString("constraints.Transform.message"), value, "Float");
 
             showViolationDialog(iMessage);
 

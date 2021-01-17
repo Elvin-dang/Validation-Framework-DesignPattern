@@ -17,7 +17,7 @@ public class DoubleValidator extends NumberValidator<Double>{
         }
         catch (NumberFormatException e) {
             violationConstraint = "Transform";
-            violationMessage = String.format(violationMessageResource.getString("STR_TRANSFORM"), value, "Double");
+            violationMessage = String.format(violationMessageResource.getString("constraints.Transform.message"), value, "Double");
 
             showViolationDialog(iMessage);
 

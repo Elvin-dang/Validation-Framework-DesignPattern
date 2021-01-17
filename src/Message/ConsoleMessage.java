@@ -6,11 +6,11 @@ package Message;
 public class ConsoleMessage implements IMessage {
     @Override
     public void notify(String violationField, String violationConstraint) {
-        System.err.println(violationField + ": " + violationConstraint);
+        System.out.println(violationField + ": " + violationConstraint);
     }
 
     @Override
     public void notify(String title, String violationField, String violationConstraint) {
-        System.err.println(title + "\t" + violationField + ": " + violationConstraint);
+        System.out.println(title + "\t" + violationField + ": " + violationConstraint);
     }
 }

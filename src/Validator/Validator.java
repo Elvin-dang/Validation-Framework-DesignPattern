@@ -1,5 +1,6 @@
 package Validator;
 
+import Message.ConsoleMessage;
 import Message.IMessage;
 import Rule.DefaultRuleListener;
 import Rule.RuleListener;
@@ -26,7 +27,7 @@ public abstract class Validator<T> {
     protected TransformationListener transformationListener;
     protected T transformedValue;
 
-    protected IMessage message= null;
+    protected IMessage message = new ConsoleMessage();
 
     // Set up is null or not null
     protected boolean notNull; // NotNull
@@ -67,6 +68,10 @@ public abstract class Validator<T> {
         return ruleID;
     }
 
+    public T getValue() {
+        return transformedValue;
+    }
+
     // Set up transformation
     public TransformationListener getTransformationListener() {
         return transformationListener;
@@ -76,13 +81,7 @@ public abstract class Validator<T> {
         this.transformationListener = transformationListener;
     }
 
-//    public T getValue() {
-//        return transformedValue;
-//    }
-
     protected abstract boolean transform(IMessage iMessage, String value);
-
-
 
     // Set up Validation Message
     public String getViolationMessage() {
@@ -120,7 +119,7 @@ public abstract class Validator<T> {
         if (value==null) {
             if (notNull) {
                 violationConstraint = "NotNull";
-                violationMessage = String.format(violationMessageResource.getString("STR_NOTNULL"));
+                violationMessage = String.format(violationMessageResource.getString("constraints.NotNull.message"));
                 showViolationDialog(iMessage);
 
                 result = false;
@@ -129,7 +128,7 @@ public abstract class Validator<T> {
         else {
             if (Null) {
                 violationConstraint = "Null";
-                violationMessage = String.format(violationMessageResource.getString("STR_NULL"));
+                violationMessage = String.format(violationMessageResource.getString("constraints.Null.message"));
                 showViolationDialog(iMessage);
 
                 result = false;
@@ -162,7 +161,7 @@ public abstract class Validator<T> {
         if (value==null) {
             if (notNull) {
                 violationConstraint = "NotNull";
-                violationMessage = String.format(violationMessageResource.getString("STR_NOTNULL"));
+                violationMessage = String.format(violationMessageResource.getString("constraints.NotNull.message"));
                 showViolationDialog(message);
 
                 result = false;
@@ -171,15 +170,12 @@ public abstract class Validator<T> {
         else {
             if (Null) {
                 violationConstraint = "Null";
-                violationMessage = String.format(violationMessageResource.getString("STR_NULL"));
+                violationMessage = String.format(violationMessageResource.getString("constraints.Null.message"));
                 showViolationDialog(message);
 
                 result = false;
             }
         }
-
-        if (result && value!=null)
-            result = validation(message, value);
 
         if (result)
             if (ruleListener!=null) {
@@ -190,22 +186,22 @@ public abstract class Validator<T> {
                         String ruleName = null;
                         if (ruleListener instanceof DefaultRuleListener)
                             ruleName = ((DefaultRuleListener)ruleListener).getRuleName(this);
-                        violationMessage = String.format(violationMessageResource.getString("STR_RULE2"), ruleName!=null ? ruleName : ruleID);
+                        violationMessage = String.format(violationMessageResource.getString("constraints.Rule2.message"), ruleName!=null ? ruleName : ruleID);
                     }
                     else
-                        violationMessage = String.format(violationMessageResource.getString("STR_RULE"));
+                        violationMessage = String.format(violationMessageResource.getString("constraints.Rule.message"));
                     showViolationDialog(message);
                 }
             }
+
+        if (result && value!=null)
+            result = validation(message, value);
 
         if (validationListener!=null) validationListener.after(this, result);
 
         return result;
     }
 
-    public T getValue() {
-        return transformedValue;
-    }
 
     protected void showViolationDialog(IMessage iMessage) {
         iMessage.notify(getViolationMessage(),  getViolationConstraint());

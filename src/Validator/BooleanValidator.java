@@ -40,7 +40,7 @@ public class BooleanValidator extends Validator<Boolean> {
 
         if (!transformValidator.validate(value)) {
             violationConstraint = "Transform";
-            violationMessage = String.format(violationMessageResource.getString("STR_TRANSFORM"), value, "Boolean");
+            violationMessage = String.format(violationMessageResource.getString("constraints.Transform.message"), value, "Boolean");
 
             showViolationDialog(iMessage);
 
@@ -64,13 +64,13 @@ public class BooleanValidator extends Validator<Boolean> {
 
         if (assertTrue && !value) {
             violationConstraint = "AssertTrue";
-            violationMessage = String.format(violationMessageResource.getString("STR_ASSERTTRUE"));
+            violationMessage = String.format(violationMessageResource.getString("constraints.AssertTrue.message"));
             showViolationDialog(iMessage);
 
             result = false;
         } else if (assertFalse && value) {
             violationConstraint = "AssertFalse";
-            violationMessage = String.format(violationMessageResource.getString("STR_ASSERTFALSE"));
+            violationMessage = String.format(violationMessageResource.getString("constraints.AssertFalse.message"));
             showViolationDialog(iMessage);
 
             result = false;
