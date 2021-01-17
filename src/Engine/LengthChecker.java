@@ -14,19 +14,16 @@ public class LengthChecker extends ConstraintChecker{
                 String fieldValueString = (String) fieldValue;
                 int min = ((Length) annotation).min();
                 int max = ((Length) annotation).max();
-                if (fieldValueString.length() < min || fieldValueString.length() > max)
-                	return false;
+                return fieldValueString.length() >= min && fieldValueString.length() <= max;
             } else if (fieldValue != null && Collection.class.isAssignableFrom(fieldValue.getClass())) {
                 Collection fieldValueCollection = (Collection) fieldValue;
                 int min = ((Length) annotation).min();
                 int max = ((Length) annotation).max();
-                if (fieldValueCollection.size() < min || fieldValueCollection.size() > max)
-                	return false;
+                return fieldValueCollection.size() >= min && fieldValueCollection.size() <= max;
             } else if (fieldValue != null && fieldValue.getClass().isArray()) {
                 int min = ((Length) annotation).min();
                 int max = ((Length) annotation).max();
-                if (Array.getLength(fieldValue) < min && Array.getLength(fieldValue) > max)
-                	return false;
+                return Array.getLength(fieldValue) >= min || Array.getLength(fieldValue) <= max;
             }
         }
         return true;

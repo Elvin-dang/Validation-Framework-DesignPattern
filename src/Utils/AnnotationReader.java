@@ -30,8 +30,6 @@ public class AnnotationReader {
     public static void check(Object obj, IMessage iMessage) throws IllegalAccessException {
         Class<?> classType = obj.getClass();
         Field[] fields = classType.getDeclaredFields();
-        ConstraintChecker constraintChecker;
-        ConstraintCheckerPool constraintCheckerPool = ConstraintCheckerPool.getInstance();
         for (Field field : fields) {
             Annotation[] annotations = field.getAnnotations();
             field.setAccessible(true);
@@ -100,6 +98,9 @@ public class AnnotationReader {
                 break;
             case NOT_BLANK_CHECKER:
                 violationConstraintString = violationMessageResource.getString("constraints.NotBlank.message");
+                break;
+            case REGEX_CHECKER:
+                violationConstraintString = violationMessageResource.getString("constraints.Regex.message");
                 break;
             default:
                 break;

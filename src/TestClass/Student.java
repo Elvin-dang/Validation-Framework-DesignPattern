@@ -16,6 +16,10 @@ public class Student {
     @Length(min = 10, max = 30)
     private String fullName;
 
+    @Regex(pattern=".*https://.*")
+    private String favoriousSite;
+
+
     @NotNull
     @Length(min = 2, max = 5)
     private ArrayList<String> address;
@@ -54,5 +58,13 @@ public class Student {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFavoriousSite() {
+        return favoriousSite;
+    }
+
+    public void setFavoriousSite(String favoriousSite) {
+        this.favoriousSite = favoriousSite;
     }
 }

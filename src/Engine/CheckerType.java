@@ -14,4 +14,5 @@ public enum CheckerType
     NOT_EMPTY_CHECKER,
     NOT_NULL_CHECKER,
     NULL_CHECKER,
+    REGEX_CHECKER
 }

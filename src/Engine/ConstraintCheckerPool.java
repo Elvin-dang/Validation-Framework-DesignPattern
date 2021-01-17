@@ -26,6 +26,7 @@ public class ConstraintCheckerPool {
         this.checkerPool.put(NOT_EMPTY_CHECKER, new NotEmptyChecker());
         this.checkerPool.put(NOT_NULL_CHECKER, new NotNullChecker());
         this.checkerPool.put(NULL_CHECKER, new NullChecker());
+        this.checkerPool.put(REGEX_CHECKER, new RegexChecker());
     }
     public static ConstraintCheckerPool getInstance() {
         return constraintsCheckerPool;

@@ -25,6 +25,7 @@ public class Demo {
         student.getAddress().add("1");
         student.getAddress().add("1");
         student.setEmail("abc@a.c");
+        student.setFavoriousSite("http://phungquocviet.com"); // Pattern là: https:// nên http sẽ sai !
         Teacher teacher = new Teacher();
         Object[] objs = new Object[10];
         objs[0] = student;
