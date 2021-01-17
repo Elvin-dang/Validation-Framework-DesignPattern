@@ -1,16 +1,18 @@
 package Utils;
 
-import AnnotationCustom.*;
-import Engine.*;
+import AnnotationCustom.Length;
+import AnnotationCustom.Max;
+import AnnotationCustom.Min;
+import Engine.CheckerType;
+import Engine.ConstraintChecker;
+import Engine.ConstraintCheckerPool;
 import Message.IMessage;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 
 public class AnnotationReader {
     private static ResourceBundle violationMessageResource = ResourceBundle.getBundle("resources.ValidationFramework/ValidationMessages");
@@ -29,78 +31,79 @@ public class AnnotationReader {
         Class<?> classType = obj.getClass();
         Field[] fields = classType.getDeclaredFields();
         ConstraintChecker constraintChecker;
+        ConstraintCheckerPool constraintCheckerPool = ConstraintCheckerPool.getInstance();
         for (Field field : fields) {
             Annotation[] annotations = field.getAnnotations();
             field.setAccessible(true);
             Object fieldValue = field.get(obj);
 
             for (Annotation annotation : annotations) {
-                // ----------------- Refator ----------------------------------------------------------------
-                constraintChecker = new MaxChecker(annotation, fieldValue);
-                if (!constraintChecker.check()) {
-                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", String.format(violationMessageResource.getString("constraints.Max.message"), String.valueOf(((Max) annotation).value())));
-                    continue;
+                for (int i = 0; i < CheckerType.values().length; i++) {
+                    boolean result = checkOneAnnotaionField(CheckerType.values()[i], annotation, fieldValue);
+                    if (!result) {
+                        String violationFieldString = getViolationField(field, classType);
+                        String violationConstraintString = getViolationConstraint(CheckerType.values()[i], annotation);
+                        iMessage.notify(violationFieldString, violationConstraintString);
+                    }
                 }
-
-                constraintChecker = new MinChecker(annotation, fieldValue);
-                if (!constraintChecker.check()) {
-                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", String.format(violationMessageResource.getString("constraints.Min.message"), String.valueOf(((Min) annotation).value())));
-                    continue;
-                }
-                constraintChecker = new NegativeChecker(annotation, fieldValue);
-                if (!constraintChecker.check()) {
-                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.Negative.message"));
-                    continue;
-                }
-                constraintChecker = new NegativeOrZeroChecker(annotation, fieldValue);
-                if (!constraintChecker.check()) {
-                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.NegativeOrZero.message"));
-                    continue;
-                }
-                constraintChecker = new PositiveChecker(annotation, fieldValue);
-                if (!constraintChecker.check()) {
-                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.Positive.message"));
-                    continue;
-                }
-                constraintChecker = new PositiveOrZeroChecker(annotation, fieldValue);
-                if (!constraintChecker.check()) {
-                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.PositiveOrZero.message"));
-                    continue;
-                }
-                
-                constraintChecker = new NotNullChecker(annotation, fieldValue);
-                if (!constraintChecker.check()) {
-                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.NotNull.message"));
-                    continue;
-                }
-                constraintChecker = new NullChecker(annotation, fieldValue);
-                if (!constraintChecker.check()) {
-                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.Null.message"));
-                    continue;
-                }
-                constraintChecker = new LengthChecker(annotation, fieldValue);
-                if (!constraintChecker.check()) {
-                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.Length.message"));
-                    continue;
-                }
-                constraintChecker = new EmailChecker(annotation, fieldValue);
-                if (!constraintChecker.check()) {
-                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.Email.message"));
-                    continue;
-                }
-                constraintChecker = new NotBlankChecker(annotation, fieldValue);
-                if (!constraintChecker.check()) {
-                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.NotBlank.message"));
-                    continue;
-                }
-                constraintChecker = new NotEmptyChecker(annotation, fieldValue);
-                if (!constraintChecker.check()) {
-                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.NotEmpty.message"));
-                    continue;
-                }
-                // TODO: refactor đống phía dưới ...
-                
             }
         }
+    }
+
+    public static boolean checkOneAnnotaionField(CheckerType checkerType, Annotation annotation, Object fieldValue) {
+        ConstraintCheckerPool constraintCheckerPool = ConstraintCheckerPool.getInstance();
+        ConstraintChecker constraintChecker = constraintCheckerPool.getChecker(checkerType);
+        constraintChecker.setAnnotation(annotation);
+        constraintChecker.setFieldValue(fieldValue);
+        return constraintChecker.check();
+    }
+
+    public static String getViolationField(Field field, Class<?> classType) {
+        return (field.getName() + " (" + classType.getName() + ")");
+    }
+
+    public static String getViolationConstraint(CheckerType checkerType, Annotation annotation) {
+        String violationConstraintString = null;
+        switch (checkerType) {
+            case EMAIL_CHECKER:
+                violationConstraintString = violationMessageResource.getString("constraints.Email.message");
+                break;
+            case LENGTH_CHECKER:
+                violationConstraintString = String.format(violationMessageResource.getString("constraints.Length.message"), ((Length) annotation).max(), ((Length) annotation).min());
+                break;
+            case MAX_CHECKER:
+                violationConstraintString = String.format(violationMessageResource.getString("constraints.Max.message"), ((Max) annotation).value());
+                break;
+            case MIN_CHECKER:
+                violationConstraintString = String.format(violationMessageResource.getString("constraints.Min.message"), ((Min) annotation).value());
+                break;
+            case NEGATIVE_CHECKER:
+                violationConstraintString = violationMessageResource.getString("constraints.Negative.message");
+                break;
+            case NEGATIVE_OR_ZERO_CHECKER:
+                violationConstraintString = violationMessageResource.getString("constraints.NegativeOrZero.message");
+                break;
+            case POSITIVE_CHECKER:
+                violationConstraintString = violationMessageResource.getString("constraints.Positive.message");
+                break;
+            case POSITIVE_OR_ZERO_CHECKER:
+                violationConstraintString = violationMessageResource.getString("constraints.PositiveOrZero.message");
+                break;
+            case NULL_CHECKER:
+                violationConstraintString = violationMessageResource.getString("constraints.Null.message");
+                break;
+            case NOT_NULL_CHECKER:
+                violationConstraintString = violationMessageResource.getString("constraints.NotNull.message");
+                break;
+            case NOT_EMPTY_CHECKER:
+                violationConstraintString = violationMessageResource.getString("constraints.NotEmpty.message");
+                break;
+            case NOT_BLANK_CHECKER:
+                violationConstraintString = violationMessageResource.getString("constraints.NotBlank.message");
+                break;
+            default:
+                break;
+        }
+        return violationConstraintString;
     }
 }

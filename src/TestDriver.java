@@ -16,24 +16,24 @@ import java.util.Locale;
 public class TestDriver {
     public static void main(String[] args)
     {
-//        Student student = new Student();
-//        student.setID(500);
-//        student.setFullName("");
-//        student.setAddress(new ArrayList<>());
-//        student.getAddress().add("1");
-//        student.getAddress().add("1");
-//        student.setEmail("abc@a.c");
-//        Teacher teacher = new Teacher();
-//        Object[] objs = new Object[10];
-//        objs[0] = student;
-//        objs[1] = teacher;
-//
-//        try {
-//            AnnotationReader.setLocale(new Locale("vi"));
-//            AnnotationReader.check(objs, new ConsoleMessage());
-//        } catch(Exception e) {
-//            System.out.println(e.getMessage());
-//        }
+        Student student = new Student();
+        student.setID(500);
+        student.setFullName("");
+        student.setAddress(new ArrayList<>());
+        student.getAddress().add("1");
+        student.getAddress().add("1");
+        student.setEmail("abc@a.c");
+        Teacher teacher = new Teacher();
+        Object[] objs = new Object[10];
+        objs[0] = student;
+        objs[1] = teacher;
+
+        try {
+            AnnotationReader.setLocale(new Locale("vi"));
+            AnnotationReader.check(objs, new ConsoleMessage());
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         RulesManager manager = new RulesManager();
 //        manager.addRule("Max18", new Rule<Integer>() {
