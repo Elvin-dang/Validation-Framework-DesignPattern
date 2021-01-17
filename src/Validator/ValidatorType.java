@@ -14,5 +14,4 @@ public enum ValidatorType {
     DOUBLE_VALIDATOR,
     DATE_VALIDATOR,
     EMAIL_VALIDATOR,
-    REGEX_VALIDATOR;
 }

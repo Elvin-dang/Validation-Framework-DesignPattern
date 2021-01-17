@@ -45,9 +45,6 @@ public class ValidatorFactory {
             case EMAIL_VALIDATOR:
                 validator = new EmailValidator();
                 break;
-            case REGEX_VALIDATOR:
-                validator = new RegexValidator();
-                break;
         }
         return validator;
     }

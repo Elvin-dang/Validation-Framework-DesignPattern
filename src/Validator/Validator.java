@@ -108,10 +108,6 @@ public abstract class Validator<T> {
 
     // Set up validate string
     public boolean validateString(String value) {
-        return validateString(null, value);
-    }
-
-    public boolean validateString(IMessage iMessage, String value) {
         boolean result = true;
 
         if (transformationListener!=null) transformationListener.before(this, value);
@@ -120,7 +116,7 @@ public abstract class Validator<T> {
             if (notNull) {
                 violationConstraint = "NotNull";
                 violationMessage = String.format(violationMessageResource.getString("constraints.NotNull.message"));
-                showViolationDialog(iMessage);
+                showViolationDialog(message);
 
                 result = false;
             }
@@ -129,14 +125,14 @@ public abstract class Validator<T> {
             if (Null) {
                 violationConstraint = "Null";
                 violationMessage = String.format(violationMessageResource.getString("constraints.Null.message"));
-                showViolationDialog(iMessage);
+                showViolationDialog(message);
 
                 result = false;
             }
         }
 
         if (result && value!=null)
-            result = transform(iMessage, value);
+            result = transform(message, value);
 
         if (transformationListener!=null) transformationListener.after(this, value, result);
 

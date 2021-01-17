@@ -53,12 +53,14 @@ public class TestDriver {
         IntegerValidator v = (IntegerValidator)ValidatorFactory.createValidator(ValidatorType.INTEGER_VALIDATOR);
         v.setRuleListener(new DefaultRuleListener(manager));
         v.setRuleID(ruleId);
+        v.setViolationMessageLanguage(new Locale("vi"));
         v.setMessage(new ConsoleMessage());
         v.setMin(0);
         v.setMax(80);
 
         v.validate(9);
         v.validate(100);
+        v.validateString("0.3");
 
         TransformationListener transformationListener = new TransformationListener() {
             @Override
