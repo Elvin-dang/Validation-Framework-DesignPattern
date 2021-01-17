@@ -68,59 +68,39 @@ public class AnnotationReader {
                     iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.PositiveOrZero.message"));
                     continue;
                 }
-
-                // TODO: refactor đống phía dưới ...
-                if (annotation.annotationType() == Null.class) {
-                    if (fieldValue != null)
-                        iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.Null.message"));
-                } else if (annotation.annotationType() == NotNull.class) {
-                    if (fieldValue == null)
-                        iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.NotNull.message"));
-                } else if (annotation.annotationType() == NotBlank.class) {
-                    if (fieldValue == null)
-                        iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.NotBlank.message"));
-                    else if (String.class.isAssignableFrom(fieldValue.getClass())) {
-                        String fieldValueString = (String) fieldValue;
-                        if (fieldValueString.trim().isEmpty())
-                            iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.NotBlank.message"));
-                    }
-                } else if (annotation.annotationType() == NotEmpty.class) {
-                    if (fieldValue == null)
-                        iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.NotEmpty.message"));
-                    else if (String.class.isAssignableFrom(fieldValue.getClass())) {
-                        String fieldValueString = (String) fieldValue;
-                        if (fieldValueString.isEmpty())
-                            iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.NotEmpty.message"));
-                    }
-                } else if (annotation.annotationType() == Length.class) {
-                    if (fieldValue != null && String.class.isAssignableFrom(fieldValue.getClass())) {
-                        String fieldValueString = (String) fieldValue;
-                        int min = ((Length) annotation).min();
-                        int max = ((Length) annotation).max();
-                        if (fieldValueString.length() < min || fieldValueString.length() > max)
-                            iMessage.notify(field.getName() + " (" + classType.getName() + ")", String.format(violationMessageResource.getString("constraints.Length.message"), String.valueOf(min), String.valueOf(max)));
-                    } else if (fieldValue != null && Collection.class.isAssignableFrom(fieldValue.getClass())) {
-                        Collection fieldValueCollection = (Collection) fieldValue;
-                        int min = ((Length) annotation).min();
-                        int max = ((Length) annotation).max();
-                        if (fieldValueCollection.size() < min || fieldValueCollection.size() > max)
-                            iMessage.notify(field.getName() + " (" + classType.getName() + ")", String.format(violationMessageResource.getString("constraints.Length.message"), String.valueOf(min), String.valueOf(max)));
-                    } else if (fieldValue != null && fieldValue.getClass().isArray()) {
-                        int min = ((Length) annotation).min();
-                        int max = ((Length) annotation).max();
-                        if (Array.getLength(fieldValue) < min && Array.getLength(fieldValue) > max)
-                            iMessage.notify(field.getName() + " (" + classType.getName() + ")", String.format(violationMessageResource.getString("constraints.Length.message"), String.valueOf(min), String.valueOf(max)));
-                    }
-                } else if (annotation.annotationType() == Email.class) {
-                    if (fieldValue != null && String.class.isAssignableFrom(fieldValue.getClass())) {
-                        String fieldValueString = (String) fieldValue;
-                        String patternString = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}";
-                        Pattern pattern = Pattern.compile(patternString);
-                        Matcher matcher = pattern.matcher(fieldValueString);
-                        if (!matcher.matches())
-                            iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.Email.message"));
-                    }
+                
+                constraintChecker = new NotNullChecker(annotation, fieldValue);
+                if (!constraintChecker.check()) {
+                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.NotNull.message"));
+                    continue;
                 }
+                constraintChecker = new NullChecker(annotation, fieldValue);
+                if (!constraintChecker.check()) {
+                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.Null.message"));
+                    continue;
+                }
+                constraintChecker = new LengthChecker(annotation, fieldValue);
+                if (!constraintChecker.check()) {
+                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.Length.message"));
+                    continue;
+                }
+                constraintChecker = new EmailChecker(annotation, fieldValue);
+                if (!constraintChecker.check()) {
+                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.Email.message"));
+                    continue;
+                }
+                constraintChecker = new NotBlankChecker(annotation, fieldValue);
+                if (!constraintChecker.check()) {
+                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.NotBlank.message"));
+                    continue;
+                }
+                constraintChecker = new NotEmptyChecker(annotation, fieldValue);
+                if (!constraintChecker.check()) {
+                    iMessage.notify(field.getName() + " (" + classType.getName() + ")", violationMessageResource.getString("constraints.NotEmpty.message"));
+                    continue;
+                }
+                // TODO: refactor đống phía dưới ...
+                
             }
         }
     }

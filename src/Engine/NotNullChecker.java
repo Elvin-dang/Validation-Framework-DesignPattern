@@ -2,6 +2,8 @@ package Engine;
 
 import java.lang.annotation.Annotation;
 
+import AnnotationCustom.NotNull;
+
 public class NotNullChecker extends ConstraintChecker {
 
     public NotNullChecker() {
@@ -12,6 +14,10 @@ public class NotNullChecker extends ConstraintChecker {
     }
     @Override
     public boolean check() {
-        return false;
+    	if (annotation.annotationType() == NotNull.class) {
+            if (fieldValue == null)
+            	 return false;
+        }
+        return true;
     }
 }
