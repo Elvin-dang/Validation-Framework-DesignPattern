@@ -80,14 +80,14 @@ public abstract class NumberValidator<T extends Number & Comparable<T>> extends 
     protected boolean inRange(T value) {
         boolean result = true;
 
-        if (min!=null) {
-            result = value.compareTo(min)>0;
-            if (minIncluded) result = result || value.compareTo(min)==0;
+        if (min != null) {
+            result = value.compareTo(min) > 0;
+            if (minIncluded) result = result || value.compareTo(min) == 0;
         }
-        if (max!=null) {
+        if (max != null) {
             boolean buffer = result;
-            result = value.compareTo(max)<0;
-            if (maxIncluded) result = result || value.compareTo(max)==0;
+            result = value.compareTo(max) < 0;
+            if (maxIncluded) result = result || value.compareTo(max) == 0;
             result = buffer && result;
         }
 
@@ -98,22 +98,20 @@ public abstract class NumberValidator<T extends Number & Comparable<T>> extends 
     protected boolean validation(IMessage iMessage, T value) {
         boolean result = true;
 
-        if (min!=null || max!=null)
+        if (min != null || max != null)
             if (!inRange(value)) {
                 String minStr = String.valueOf(min);
                 String maxStr = String.valueOf(max);
 
-                if (min!=null && max!=null) {
+                if (min != null && max != null) {
                     violationConstraint = "Range";
-                    violationMessage = String.format(violationMessageResource.getString("STR_RANGE"), value, OPENED[minIncluded?1:0]+minStr, maxStr+CLOSED[maxIncluded?1:0]);
-                }
-                else if (min==null && max!=null) {
+                    violationMessage = String.format(violationMessageResource.getString("constraints.Range.message"), minStr, maxStr);
+                } else if (min == null && max != null) {
                     violationConstraint = "Max";
-                    violationMessage = String.format(violationMessageResource.getString("STR_RANGE2"), value, SMALLER[maxIncluded?(iMessage==null?1:2):0]+maxStr);
-                }
-                else if (min!=null && max==null) {
+                    violationMessage = String.format(violationMessageResource.getString("constraints.Max.message"), value);
+                } else if (min != null && max == null) {
                     violationConstraint = "Min";
-                    violationMessage = String.format(violationMessageResource.getString("STR_RANGE2"), value, LARGER[minIncluded?(iMessage==null?1:2):0]+minStr);
+                    violationMessage = String.format(violationMessageResource.getString("constraints.Min.message"), value);
                 }
 
                 showViolationDialog(iMessage);
@@ -128,24 +126,23 @@ public abstract class NumberValidator<T extends Number & Comparable<T>> extends 
     protected abstract T getNumber(BigDecimal value);
 
 
-
     protected BigDecimal putNumber(T value) {
         if (value instanceof BigDecimal)
-            return (BigDecimal)value;
+            return (BigDecimal) value;
         else if (value instanceof BigInteger)
-            return new BigDecimal((BigInteger)value);
+            return new BigDecimal((BigInteger) value);
         else if (value instanceof Double)
-            return new BigDecimal((Double)value);
+            return new BigDecimal((Double) value);
         else if (value instanceof Long)
-            return new BigDecimal((Long)value);
+            return new BigDecimal((Long) value);
         else if (value instanceof Integer)
-            return new BigDecimal((Integer)value);
+            return new BigDecimal((Integer) value);
         else if (value instanceof Float)
-            return new BigDecimal((Double)value);
+            return new BigDecimal((Double) value);
         else if (value instanceof Short)
-            return new BigDecimal((Integer)value);
+            return new BigDecimal((Integer) value);
         else if (value instanceof Byte)
-            return new BigDecimal((Integer)value);
+            return new BigDecimal((Integer) value);
 
         return null;
     }

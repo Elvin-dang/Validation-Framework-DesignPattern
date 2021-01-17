@@ -14,11 +14,6 @@ import java.util.ResourceBundle;
 public abstract class Validator<T> {
     protected static ResourceBundle violationMessageResource = ResourceBundle.getBundle("resources.ValidationFramework/ValidationMessages");
 
-    protected static final String[] OPENED  = {"(", "["};
-    protected static final String[] CLOSED  = {")", "]"};
-    protected static final String[] SMALLER = {"<", "<=", "\u2264"};
-    protected static final String[] LARGER  = {">", ">=", "\u2265"};
-
     protected String violationMessage;
     protected String violationConstraint;
 //    protected String constraints;
@@ -54,9 +49,6 @@ public abstract class Validator<T> {
     public void setMessage(IMessage message) {
         this.message = message;
     }
-
-//    public void validate() {
-//    }
 
     // Set up rule
     public void setRuleListener(RuleListener ruleListener) {
@@ -150,7 +142,7 @@ public abstract class Validator<T> {
         if (transformationListener!=null) transformationListener.after(this, value, result);
 
         if (result)
-            return validate(iMessage, transformedValue);
+            return validate(transformedValue);
         else
             return false;
     }
@@ -158,10 +150,6 @@ public abstract class Validator<T> {
     protected abstract boolean validation(IMessage iMessage, T value);
 
     public boolean validate(T value) {
-        return validate(null, value);
-    }
-
-    public boolean validate(IMessage iMessage, T value) {
         this.transformedValue = value;
 
         boolean result = true;
@@ -175,7 +163,7 @@ public abstract class Validator<T> {
             if (notNull) {
                 violationConstraint = "NotNull";
                 violationMessage = String.format(violationMessageResource.getString("STR_NOTNULL"));
-                showViolationDialog(iMessage);
+                showViolationDialog(message);
 
                 result = false;
             }
@@ -184,14 +172,14 @@ public abstract class Validator<T> {
             if (Null) {
                 violationConstraint = "Null";
                 violationMessage = String.format(violationMessageResource.getString("STR_NULL"));
-                showViolationDialog(iMessage);
+                showViolationDialog(message);
 
                 result = false;
             }
         }
 
         if (result && value!=null)
-            result = validation(iMessage, value);
+            result = validation(message, value);
 
         if (result)
             if (ruleListener!=null) {
@@ -206,7 +194,7 @@ public abstract class Validator<T> {
                     }
                     else
                         violationMessage = String.format(violationMessageResource.getString("STR_RULE"));
-                    showViolationDialog(iMessage);
+                    showViolationDialog(message);
                 }
             }
 
@@ -220,7 +208,7 @@ public abstract class Validator<T> {
     }
 
     protected void showViolationDialog(IMessage iMessage) {
-        iMessage.notify();
+        iMessage.notify(getViolationMessage(),  getViolationConstraint());
     }
 
 }

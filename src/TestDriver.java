@@ -6,6 +6,7 @@ import TestClass.Student;
 import TestClass.Teacher;
 import Utils.AnnotationReader;
 
+import Validator.*;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -29,7 +30,7 @@ public class TestDriver {
 
         try {
             AnnotationReader.setLocale(new Locale("vi"));
-            AnnotationReader.check(objs, new WindowMessage());
+            AnnotationReader.check(objs, new ConsoleMessage());
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }
@@ -47,5 +48,14 @@ public class TestDriver {
         System.out.println(manager.getRuleName(manager.getRuleID("Max18")));
         System.out.println(manager.checkRule(ruleId, -2));
         System.out.println(manager.checkRule(ruleId, 19));
+
+        ValidatorFactory.getInstance();
+        IntegerValidator v = (IntegerValidator)ValidatorFactory.createValidator(ValidatorType.INTEGER_VALIDATOR);
+        v.setMin(25);
+        v.setMax(100);
+        v.setMessage(new ConsoleMessage());
+        v.validate( 23);
+        v.validate(101);
+
     }
 }

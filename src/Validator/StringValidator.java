@@ -118,15 +118,15 @@ public class StringValidator extends Validator<String> {
 
                     if (min!=null && max!=null) {
                         violationConstraint = "Size";
-                        violationMessage = String.format(violationMessageResource.getString("STR_SIZE"), value, OPENED[1]+minStr, maxStr+CLOSED[1]);
+                        violationMessage = String.format(violationMessageResource.getString("constraints.Length.message"), minStr, maxStr);
                     }
                     else if (min==null && max!=null) {
                         violationConstraint = "Max";
-                        violationMessage = String.format(violationMessageResource.getString("STR_SIZE2"), value, SMALLER[iMessage==null?1:2]+maxStr);
+                        violationMessage = String.format(violationMessageResource.getString("constraints.Max.message"), value);
                     }
                     else if (min!=null && max==null) {
                         violationConstraint = "Min";
-                        violationMessage = String.format(violationMessageResource.getString("STR_SIZE2"), value, LARGER[iMessage==null?1:2]+minStr);
+                        violationMessage = String.format(violationMessageResource.getString("constraints.Min.message"), value);
                     }
 
                     showViolationDialog(iMessage);
